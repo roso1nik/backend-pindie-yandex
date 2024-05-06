@@ -1,4 +1,5 @@
 const categoriesRouter = require("express").Router();
+const { checkAuth } = require("../middlewares/auth.js");
 
 const {
     sendAllCategories,
@@ -25,26 +26,28 @@ categoriesRouter.get("/categories", findAllCategories, sendAllCategories);
 //     sendCategoryCreated,
 //     sendCategoryDeleted
 // );
+categoriesRouter.get("/categories/:id", findCategoryById, sendCategoryById);
 categoriesRouter.post(
     "/categories",
     findAllCategories,
-    checkEmptyName,
     checkIsCategoryExists,
+    checkEmptyName,
+    checkAuth,
     createCategory,
     sendCategoryCreated
 );
-categoriesRouter.get("/categories/:id", findCategoryById, sendCategoryById);
 categoriesRouter.put(
-    "/categories/:id", // Слушаем запросы по эндпоинту
-    findCategoryById, // Шаг 1. Находим игру по id из запроса
-    // Шаг 2. Проверки, если нужны
-    updateCategory, // Шаг 3. Обновляем запись с игрой
-    sendCategoryUpdated // Шаг 4. Возвращаем на клиент ответ с результатом обновления
+    "/categories/:id",
+    checkEmptyName,
+    checkAuth,
+    updateCategory,
+    sendCategoryUpdated
 );
 categoriesRouter.delete(
-    "/categories/:id", // Слушаем запросы по эндпоинту
+    "/categories/:id",
+    checkAuth,
     deleteCategory,
-    sendCategoryDeleted // Тут будут функция удаления элементов из MongoDB и ответ клиенту
+    sendCategoryDeleted
 );
 
 module.exports = categoriesRouter;

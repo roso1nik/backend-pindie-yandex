@@ -2,26 +2,24 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("./middlewares/cors");
-
-// ROUTER
-const gamesRouter = require("./routes/games");
-const usersRouter = require("./routes/users");
-const categoriesRouter = require("./routes/categories");
+const cookieParser = require("cookie-parser");
 
 // consts
-const PORT = 3000;
+const PORT = 3001;
 const app = express();
 
 const connectToDatabase = require("./database/connect");
+const apiRouter = require("./routes/apiRouter");
+const pagesRouter = require("./routes/pages");
 connectToDatabase();
 
 app.use(
     cors,
+    cookieParser(),
     bodyParser.json(),
-    express.static(path.join(__dirname, "public")),
-    usersRouter,
-    gamesRouter,
-    categoriesRouter
+    pagesRouter,
+    apiRouter,
+    express.static(path.join(__dirname, "public"))
 );
 
 app.listen(PORT, () => {

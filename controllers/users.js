@@ -23,6 +23,10 @@ const sendUserDeleted = (req, res) => {
     // Отправляем на клиент найденный и удалённый элемент из базы данных
     res.end(JSON.stringify(req.user));
 };
+const sendMe = (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(req.user));
+};
 
 // Экспортируем контроллер
 module.exports = {
@@ -31,4 +35,5 @@ module.exports = {
     sendUserById,
     sendUserUpdated,
     sendUserDeleted,
+    sendMe,
 };

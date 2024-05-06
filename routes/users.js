@@ -1,4 +1,5 @@
 const usersRouter = require("express").Router();
+const { checkAuth } = require("../middlewares/auth.js");
 
 const {
     findAllUsers,
@@ -9,6 +10,7 @@ const {
     checkEmptyNameAndEmailAndPassword,
     checkEmptyNameAndEmail,
     checkIsUserExists,
+    hashPassword,
 } = require("../middlewares/users");
 const {
     sendAllUsers,
@@ -16,28 +18,29 @@ const {
     sendUserById,
     sendUserUpdated,
     sendUserDeleted,
+    sendMe,
 } = require("../controllers/users");
 
 usersRouter.get("/users", findAllUsers, sendAllUsers);
+usersRouter.get("/users/:id", findUserById, sendUserById);
+usersRouter.get("/me", checkAuth, sendMe);
 usersRouter.post(
     "/users",
     findAllUsers,
-    checkEmptyNameAndEmailAndPassword,
     checkIsUserExists,
+    checkEmptyNameAndEmailAndPassword,
+    checkAuth,
+    hashPassword,
     createUser,
     sendUserCreated
 );
-usersRouter.get("/users/:id", findUserById, sendUserById);
 usersRouter.put(
-    "/users/:id", // Слушаем запросы по эндпоинту
+    "/users/:id",
     checkEmptyNameAndEmail,
-    updateUser, // Обновляем запись в MongoDB
-    sendUserUpdated // Возвращаем ответ на клиент
+    checkAuth,
+    updateUser,
+    sendUserUpdated
 );
-usersRouter.delete(
-    "/users/:id", // Слушаем запросы по эндпоинту
-    deleteUser,
-    sendUserDeleted // Тут будут функция удаления элементов из MongoDB и ответ клиенту
-);
+usersRouter.delete("/users/:id", checkAuth, deleteUser, sendUserDeleted);
 
 module.exports = usersRouter;
