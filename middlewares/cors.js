@@ -6,6 +6,9 @@ const allowedCors = [
     "https://pindie.nomoredomainswork.ru",
     "http://pindie.nomoredomainswork.ru",
     "https://apipindie.nomoredomainswork.ru",
+    "http://apipindie.nomoredomainswork.ru",
+    "https://apipindie.nomoredomainswork.ru/*",
+    "https://pindie.nomoredomainswork.ru/*",
 ];
 
 function cors(req, res, next) {
